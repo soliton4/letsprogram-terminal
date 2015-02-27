@@ -1,0 +1,34 @@
+
+
+
+  try{
+
+    var Fw = require ("promiseland-webframework");
+
+    var fw = new Fw({
+      loadOnConnect: "terminal/terminal",
+      dirs: [{
+        client: "/terminal",
+        server: __dirname + "/terminal/"
+      }, {
+        client: "/term",
+        server: __dirname + "/term.js/"
+      }],
+      css: "terminal/style.css",
+      requireConfig: {
+        shim: {
+          "term/src/term": {
+            exports: "Terminal"
+          }
+        }
+      }
+    });
+    fw.listen(4010);
+
+
+    require "./terminal/terminal";
+
+  }catch(e){
+    console.log(e);
+  };
+  

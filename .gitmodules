@@ -1,0 +1,3 @@
+[submodule "term.js"]
+	path = term.js
+	url = https://github.com/chjj/term.js.git

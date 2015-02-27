@@ -1,0 +1,127 @@
+
+var pty;
+var Terminal;
+
+class type sync all TheTerminal {
+  constructor: (){
+    console.log("i am being created");
+    
+    TheTerminal self = this;
+    
+    if (pty){
+      this.pty = pty.spawn('bash', [], {
+        name: 'xterm-color',
+        cols: 80,
+        rows: 30,
+        cwd: process.env.HOME,
+        env: process.env
+      });
+
+      this.pty.on('data', function(data) {
+        self.data(data);
+      });
+      
+      this.pty.write('ls\r');
+
+    };
+    if (Terminal){
+      this.term = new Terminal({
+        cols: 80,
+        rows: 30,
+        useStyle: true
+      });
+      this.term.open(document.body);
+      
+      this.term.on("data", (data){
+        self.input(data);
+      });
+      
+
+    };
+  },
+  var data(data){
+    if (this.term){
+      this.term.write(data);
+    };
+  },
+  var input(data){
+    if (this.pty){
+      this.pty.write(data);
+    };
+  },
+  var frontEndResize(x, y){
+    if (this.pty){
+      console.log("resize: " + x + " " + y);
+      this.pty.resize(x, y);
+      this.resize(x, y);
+    };
+  },
+  var resize(x, y){
+    if (this.term){
+      this.term.resize(x, y);
+    };
+  }
+};
+
+TheTerminal local;
+var init = false;
+
+
+TheTerminal* getTerm () frame "server" {
+  if (!init){
+    local = new TheTerminal();
+    init = true;
+  };
+  return local;
+}
+
+
+() exclusive "server" {
+
+
+  pty = require('pty.js');
+  
+
+  /*var term = pty.spawn('bash', [], {
+    name: 'xterm-color',
+    cols: 80,
+    rows: 30,
+    cwd: process.env.HOME,
+    env: process.env
+  });
+
+  term.on('data', function(data) {
+    console.log("console data:");
+    console.log(data);
+  });
+
+  term.write('ls\r');
+  term.resize(100, 40);
+  term.write('ls /\r');
+
+  console.log(term.process);*/
+
+}();
+
+() exclusive "client" {
+
+  try{
+    console.log("hi");
+    
+    Terminal = require "term/src/term";
+    
+    local = *getTerm();
+    
+    window.onresize = function(event) {
+      var h = window.innerHeight;
+      var w = window.innerWidth;
+      h = Math.floor(h / 13) - 2;
+      w = Math.floor(w / 6.8) - 1;
+      local.frontEndResize(w, h);
+    };
+
+  }catch(e){
+    console.log(e);
+  };
+  
+}();

@@ -1,0 +1,22 @@
+{
+  "version": "0.1",
+  "author": {
+    "name": "Matthias Behrens",
+    "email": "matthias.behrens@gmail.com"
+  },
+  "description": "lets program a terminal",
+  "dependencies" : {
+    "promiseland"   :  "0.0.20",
+    "promiseland-webframework":  "0.1.8",
+    "pty.js": "0.2.5"
+  },  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/soliton4/letsprogram-terminal"
+  },
+  "license": "BSD",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "readmeFilename": "README.md"
+}
